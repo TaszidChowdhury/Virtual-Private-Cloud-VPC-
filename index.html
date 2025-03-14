@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS VPC Showcase</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    
+
+</head>
+<body>
+    <header>
+        <h1>AWS VPC SHOWCASE</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#walkthrough">Walkthrough</a></li>
+                <li><a href="#concepts">VPC Concepts</a></li>
+                <li><a href="#documentation">AWS VPC Documentation</a></li>
+                <li><a href="#scripts">Terraform</a></li>
+                <li><a href="#demo">Live Demo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home">
+        <h2>Welcome to My AWS VPC Showcase</h2>
+        <p>Explore the architecture, setup process, and automation scripts for my AWS VPC.</p>
+    </section>
+
+    <section id="architecture">
+        <h2>VPC Architecture</h2>
+        <p>Below is the architecture of <strong>VPC ONE</strong>, based on the AWS resource map.</p>
+        <img src="ResourceMap.png" alt="AWS VPC Architecture" style="max-width:100%; height:auto;">
+    </section>
+
+    <section id="walkthrough">
+        <h2>Step-by-Step Walkthrough</h2>
+        <p>This section provides a detailed breakdown of how I configured my AWS VPC.</p>
+        <h3>1️⃣ Create the VPC</h3>
+        <ul>
+            <li>Go to the AWS Console → VPC Dashboard.</li>
+            <li>Click "Create VPC".</li>
+            <li>Name: <strong>VPC ONE</strong></li>
+            <li>IPv4 CIDR: <strong>10.200.0.0/16</strong></li>
+            <li>Click "Create VPC".</li>
+        </ul>
+
+        <h3>2️⃣ Create Public and Private Subnets</h3>
+        <ul>
+            <li>Go to "Subnets" and click "Create subnet".</li>
+            <li>Public Subnet:
+                <ul>
+                    <li>Name: <strong>pblc-1a</strong></li>
+                    <li>Availability Zone: <strong>us-east-1a</strong></li>
+                    <li>IPv4 CIDR: <strong>10.200.1.0/24</strong></li>
+                </ul>
+            </li>
+            <li>Private Subnet:
+                <ul>
+                    <li>Name: <strong>prvt-1a</strong></li>
+                    <li>IPv4 CIDR: <strong>10.200.2.0/24</strong></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>3️⃣ Create and Attach an Internet Gateway</h3>
+        <ul>
+            <li>Go to "Internet Gateways" → Click "Create IGW".</li>
+            <li>Name: <strong>IGW</strong></li>
+            <li>Attach it to <strong>VPC ONE</strong>.</li>
+        </ul>
+
+        <h3>4️⃣ Set Up Route Tables</h3>
+        <ul>
+            <li>Go to "Route Tables" → Click "Create Route Table".</li>
+            <li>Public Route Table: 
+                <ul>
+                    <li>Name: <strong>public-1a-route-table</strong></li>
+                    <li>Associate with: <strong>VPC ONE</strong></li>
+                    <li>Route to <strong>IGW</strong> (0.0.0.0/0 → IGW)</li>
+                </ul>
+            </li>
+            <li>Private Route Table:
+                <ul>
+                    <li>Name: <strong>private-1a-route-table</strong></li>
+                    <li>Associate with: <strong>VPC ONE</strong></li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>5️⃣ Configure NAT Gateway for Private Subnet</h3>
+        <ul>
+            <li>Go to "Elastic IPs" → Allocate a new EIP.</li>
+            <li>Go to "NAT Gateways" → Click "Create NAT Gateway".</li>
+            <li>Attach it to <strong>pblc-1a</strong> subnet.</li>
+            <li>Assign the Elastic IP.</li>
+            <li>Modify the private route table:
+                <ul>
+                    <li>Route <strong>0.0.0.0/0</strong> to the NAT Gateway.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>6️⃣ Add an S3 VPC Endpoint</h3>
+        <ul>
+            <li>Go to "Endpoints" → Click "Create Endpoint".</li>
+            <li>Service Name: <strong>com.amazonaws.us-east-1.s3</strong></li>
+            <li>Attach to <strong>VPC ONE</strong> and both subnets.</li>
+        </ul>
+    </section>
+    
+    <section id="concepts">
+        <h2>VPC Concepts</h2>
+        <p>This section explains key concepts related to AWS Virtual Private Cloud (VPC) and how they apply to the <strong>VPC ONE</strong> architecture.</p>
+    
+        <h3>1️⃣ What is a Virtual Private Cloud (VPC)?</h3>
+        <p>A VPC is a logically isolated section of the AWS cloud where you can launch AWS resources in a **customized network environment**. It provides full control over IP address ranges, subnets, route tables, and gateways, making it a **secure and scalable** cloud networking solution.</p>
+    
+        <h3>2️⃣ Subnets</h3>
+        <p>Subnets divide a VPC into smaller network segments, allowing for better organization and security. **VPC ONE** includes:</p>
+        <ul>
+            <li><strong>Public Subnet (pblc-1a)</strong> - 10.200.0.0/24</li>
+            <li><strong>Private Subnet (prvt-1a)</strong> - 10.200.128.0/24</li>
+        </ul>
+        <p>Public subnets allow internet access, while private subnets are isolated unless routed through a NAT Gateway.</p>
+    
+        <h3>3️⃣ Route Tables</h3>
+        <p>Route tables **direct network traffic** within the VPC. Each subnet is associated with a route table that determines how it connects to other subnets and the internet.</p>
+        <ul>
+            <li><strong>Public Route Table (main-route-table)</strong> - Routes internet-bound traffic through the Internet Gateway.</li>
+            <li><strong>Private Route Table (private-1a-route-table)</strong> - Routes internet-bound traffic through the NAT Gateway.</li>
+        </ul>
+    
+        <h3>4️⃣ Internet Gateway (IGW)</h3>
+        <p>An **Internet Gateway (IGW)** allows resources in the **public subnet** to send and receive traffic from the internet. It is attached to the VPC and linked to the public route table.</p>
+    
+        <h3>5️⃣ NAT Gateway</h3>
+        <p>Instances in a private subnet cannot access the internet directly. A **NAT Gateway** enables them to **outbound internet access** while keeping them protected from inbound traffic.</p>
+    
+        <h3>6️⃣ VPC Endpoint for S3</h3>
+        <p>A **VPC Endpoint for Amazon S3** enables private subnet instances to communicate with **S3 without needing internet access**. This improves security and reduces data transfer costs.</p>
+    
+        <h3>7️⃣ Security Groups vs. Network ACLs</h3>
+        <p>AWS provides two layers of security to control traffic flow:</p>
+        <ul>
+            <li><strong>Security Groups:</strong> Act as virtual firewalls at the instance level.</li>
+            <li><strong>Network ACLs (Access Control Lists):</strong> Control inbound and outbound traffic at the subnet level.</li>
+        </ul>
+    
+        <h3>8️⃣ VPC Flow Logs</h3>
+        <p>VPC Flow Logs capture network traffic metadata for security analysis and troubleshooting.</p>
+    
+        <h3>9️⃣ AWS Transit Gateway</h3>
+        <p>A **Transit Gateway** allows multiple VPCs to connect efficiently, simplifying network management in large-scale cloud environments.</p>
+    </section>
+    
+
+    <section id="documentation">
+        <h2>AWS VPC Documentation</h2>
+        <p>This section contains comprehensive details from the AWS VPC User Guide.</p>
+
+        <h3>1️⃣ Overview of Amazon VPC</h3>
+        <p>Amazon Virtual Private Cloud (Amazon VPC) allows you to create an isolated network within AWS. It operates similarly to a traditional data center, offering control over networking configurations while benefiting from AWS scalability.</p>
+
+        <h3>2️⃣ VPC Components</h3>
+        <ul>
+            <li><strong>Subnets:</strong> IP ranges within a VPC that allow segmentation across Availability Zones.</li>
+            <li><strong>Route Tables:</strong> Direct traffic within the VPC and to external resources.</li>
+            <li><strong>Internet Gateway (IGW):</strong> Provides public internet access for VPC resources.</li>
+            <li><strong>NAT Gateway:</strong> Enables private subnet instances to access the internet securely.</li>
+            <li><strong>Security Groups:</strong> Control inbound and outbound traffic at the instance level.</li>
+            <li><strong>Network ACLs:</strong> Apply additional security rules at the subnet level.</li>
+            <li><strong>VPC Peering:</strong> Connects VPCs for private communication.</li>
+        </ul>
+
+        <h3>3️⃣ VPC Subnetting and IP Addressing</h3>
+        <ul>
+            <li>Amazon VPC supports both **IPv4 and IPv6 addressing**.</li>
+            <li>Public subnets contain **public IP addresses** and connect to the internet.</li>
+            <li>Private subnets rely on a **NAT Gateway** for outbound internet traffic.</li>
+            <li>Elastic IP addresses provide **static, routable IPs** for AWS resources&#8203;:contentReference[oaicite:1]{index=1}.</li>
+        </ul>
+
+        <h3>4️⃣ Routing & Internet Access</h3>
+        <ul>
+            <li>VPC route tables dictate how traffic moves between **subnets, gateways, and external networks**.</li>
+            <li>A VPC can include an **Internet Gateway (IGW)** for direct public access.</li>
+            <li>For private communication, AWS offers **VPC Peering, VPN, and Direct Connect** options.</li>
+        </ul>
+
+        <h3>5️⃣ Security Features in Amazon VPC</h3>
+        <ul>
+            <li>**Security Groups:** Instance-level firewalls that manage inbound/outbound rules.</li>
+            <li>**Network ACLs:** Subnet-wide firewalls that offer an extra layer of security.</li>
+            <li>**VPC Flow Logs:** Monitor network traffic for compliance and security purposes.</li>
+            <li>**AWS Network Firewall:** Defends against common network threats&#8203;:contentReference[oaicite:2]{index=2}.</li>
+        </ul>
+
+        <h3>6️⃣ Amazon VPC Pricing</h3>
+        <ul>
+            <li>Creating and using a VPC is **free of charge**, but additional services (e.g., **NAT Gateway, VPN**) have costs.</li>
+            <li>Public IPv4 addresses are billable, while private IPv4 addresses are free.</li>
+            <li>For full pricing details, visit <a href="https://aws.amazon.com/vpc/pricing/" target="_blank">AWS VPC Pricing</a>.</li>
+        </ul>
+
+        <h3>📄 Read More</h3>
+        <p><a href="vpc-ug.pdf" download>Download Full AWS VPC User Guide</a></p>
+    </section>
+
+    <section id="scripts">
+        <h2>Terraform Script</h2>
+        <p>Click the link below to download the full Terraform script:</p>
+        <p><a href="terraform_vpc.tf" download>Download Terraform Script</a></p>
+    </section>
+
+    <section id="demo">
+        <h2>Live Demo</h2>
+        <p>[Live demo placeholder]</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Taszid Chowdhury</p>
+    </footer>
+</body>
+</html>
