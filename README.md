@@ -43,7 +43,6 @@ This project serves as a **visual and interactive guide** to AWS **VPC networkin
 ✅ **Keyboard navigation** (⬆️ & ⬇️ to switch sections)  
 ✅ **Back-to-top button**  
 ✅ **Dark mode with local storage**  
-✅ **Secret Easter Egg 🕵️** (Can you find it? 😉)  
 
 ---
 
