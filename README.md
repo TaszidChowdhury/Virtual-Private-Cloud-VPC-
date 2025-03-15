@@ -18,7 +18,7 @@ This project serves as a **visual and interactive guide** to AWS **VPC networkin
 ---
 
 ## 📸 **Screenshots**
-<img src="screenshot.png" alt="AWS VPC Showcase Screenshot" width="800">
+<img src="ResourceMap.png" alt="AWS VPC Showcase Screenshot" width="800">
 
 ---
 
