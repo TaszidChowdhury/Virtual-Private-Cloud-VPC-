@@ -17,6 +17,20 @@ This project serves as a **visual and interactive guide** to AWS **VPC networkin
 
 ---
 
+## 🏗️ **What is Amazon VPC?**
+With **Amazon Virtual Private Cloud (Amazon VPC)**, you can launch AWS resources in a **logically isolated virtual network** that you define.  
+This **virtual network** closely resembles a traditional on-premises network but benefits from the **scalability and flexibility of AWS**.
+
+The following diagram shows an example **VPC architecture**.  
+Each **Availability Zone** in the Region contains a **subnet** with EC2 instances, and an **Internet Gateway** allows communication between the VPC and the **internet**.
+
+### 📸 **VPC Architecture Diagram**
+![AWS VPC Architecture](how-it-works.png)
+
+_For more details, visit the official [Amazon VPC Documentation](https://aws.amazon.com/vpc/)_
+
+---
+
 ## 📸 **VPC Resource Map**
 <img src="ResourceMap.png" alt="AWS VPC Showcase Screenshot" width="800">
 
