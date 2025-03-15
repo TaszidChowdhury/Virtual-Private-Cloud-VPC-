@@ -61,7 +61,7 @@ nav ul li a {
 
 nav ul li a:hover {
     background: var(--primary-color);
-    color: white;
+    color: rgb(204, 116, 116);
 }
 
 /* Sections */
